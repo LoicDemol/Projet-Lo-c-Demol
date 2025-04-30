@@ -1,0 +1,261 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#define TAILLE_NOM 50
+// Etape 1 C  3 avant modification
+/*int main() {
+    int choix;
+    while (1) {
+        printf("+-----------------------------------+\n");
+        printf("| 1 : Addition                     |\n");
+        printf("| 2 : Soustraction                 |\n");
+        printf("| 3 : Multiplication               |\n");
+        printf("| 4 : Tables des multiplications   |\n");
+        printf("| 5 : Divisions                    |\n");
+        printf("| 0 : Sortir du jeu                |\n");
+        printf("+-----------------------------------+\n");
+        printf("Quel est votre choix ? ");
+        scanf("%d", &choix);
+        if (choix == 0) {
+            printf("Merci de votre visite.\n");
+            break;
+        } else if (choix == 1) {
+            printf("Addition\n");
+        } else if (choix == 2) {
+            printf("Soustraction\n");
+        } else if (choix == 3) {
+            printf("Multiplication\n");
+        } else if (choix == 4) {
+            printf("Tables des multiplications\n");
+        } else if (choix == 5) {
+            printf("Divisions\n");
+        } else {
+            printf("Choix invalide, veuillez essayer C   nouveau.\n");
+        }
+    }
+    return 0;
+} */
+
+// PremiC(re addition
+/*
+int main() {
+    srand(time(NULL));
+    int a = rand() % 101;
+    int b = rand() % 101;
+    int reponse;
+    printf("Quel est le rC)sultat de %d + %d ?\n", a, b);
+    scanf("%d", &reponse);
+    if (reponse == (a + b)) {
+        printf("Bravo ! Bonne rC)ponse.\n");
+    } else {
+        printf("Faux,la bonne rC)ponse C)tait %d.\n", a + b);
+    }
+
+    return 0;
+}
+*/
+
+//Compte des points 1 par 1:
+/*
+int poserQuestion(int bonneReponse) {
+    int reponse;
+    int essais = 0;
+    printf("Entrez votre rC)ponse : ");
+    scanf("%d", &reponse);
+    if (reponse == bonneReponse) {
+        printf("Bravo !\n");
+        return 1;
+    else {
+           printf("Mauvaise rC)ponse.\n");
+        }
+    printf("La bonne rC)ponse C)tait : %d\n", bonneReponse);
+    return 0;
+}
+*/
+
+void afficherMenu();
+void jouerAddition(int *score);
+void jouerMultiplication(int *score);
+void jouerSoustraction(int *score);
+void jouerTables(int *score);
+void jouerDivisions(int *score);
+void afficherTables(int tables);
+void exercerTables(int tables, int *score);
+int poserQuestion(int bonneReponse);
+void chargerScore(char *nom, int *score);
+void sauvegarderScore(char *nom, int score);
+
+int main() {
+	int choix;
+	int score = 0;// Score de dC)part
+	char nom[TAILLE_NOM];
+	srand(time(NULL));
+	printf("Entrez votre nom : ");// L'utilisateur rentre le nom qui sera associC) C  son score
+	scanf("%s", nom);
+	chargerScore(nom, &score);
+	printf("Bienvenue %s ! Votre score actuel est : %d\n", nom, score);
+	do {// DiffC)rente possibilitC)s de choix dans le menu
+		afficherMenu();
+		scanf("%d", &choix);
+		switch (choix) {
+		case 1:
+			jouerAddition(&score);
+			break;
+		case 2:
+			jouerSoustraction(&score);
+			break;
+		case 3:
+			jouerMultiplication(&score);
+			break;
+		case 4:
+			jouerTables(&score);
+			break;
+		case 5:
+			jouerDivisions(&score);
+			break;
+		case 6:
+			printf("Votre score actuel est : %d\n", score);
+			break;
+		case 0:// sort de la console
+			printf("Merci de votre visite %s ! Votre score final est : %d\n", nom, score);
+			break;
+		default:
+			printf("Choix invalide, rentrez un chiffre entre 0 et 6.\n");
+		}
+		sauvegarderScore(nom, score);
+	} while (choix != 0);
+	return 0;
+}
+void afficherMenu() {
+	printf("+-----------------------------------+\n");
+	printf("|1 : Addition                       |\n");
+	printf("|2 : Soustraction                   |\n");
+	printf("|3 : Multiplication                 |\n");
+	printf("|4 : Tables des multiplications     |\n");
+	printf("|5 : Divisions                      |\n");
+	printf("|6 : Afficher le score              |\n");	
+	printf("|0 : Sortir du jeu                  |\n");
+	printf("+-----------------------------------+\n");
+	printf("Quel est votre choix ?\n");
+}
+int poserQuestion(int bonneReponse) {
+	int reponse;
+	int essais = 0;
+	do {
+		printf("Entrez votre rC)ponse : ");
+		scanf("%d", &reponse);
+		essais++;
+		if (reponse == bonneReponse) {
+			printf("Bravo !\n");
+			if (essais == 1) return 10;
+			else if (essais == 2) return 5;
+			else if (essais == 3) return 1;
+		} else {
+			printf("Mauvaise rC)ponse.\n");
+		}
+	} while (essais < 3);
+	printf("La bonne rC)ponse C)tait : %d\n", bonneReponse);
+	return 0;
+}
+void jouerAddition(int *score) {
+	int a = rand() % 101;
+	int b = rand() % 101;
+	printf("Addition\n");
+	printf("%d + %d = ?\n", a, b);
+	*score += poserQuestion(a + b);
+}
+void jouerMultiplication(int *score) {
+	int a = rand() % 11;
+	int b = rand() % 11;
+	printf("Multiplication\n");
+	printf("%d * %d = ?\n", a, b);
+	*score += poserQuestion(a * b);
+}
+void jouerSoustraction(int *score) {
+	int a = rand() % 101;
+	int b = rand() % 101;
+	if (a < b) {
+		int temp = a;
+		a = b;
+		b = temp;
+	}
+	printf("Soustraction\n");
+	printf("%d - %d = ?\n", a, b);
+	*score += poserQuestion(a - b);
+}
+void jouerTables(int *score) {
+	int tables;
+	printf("Quelle table voulez-vous ? (1 C  10) : ");
+	scanf("%d", &tables);
+	if (tables < 1 || tables > 10) {
+		printf("Rentrez une table entre 1 et 10.\n");
+		return;
+	}
+	afficherTables(tables);
+	exercerTables(tables, score);
+}
+void afficherTables(int tables) {
+	printf("La table de %d est :\n", tables);
+	for (int i = 0; i <= 10; i++) {
+		printf("%d * %d = %d\n", tables, i, tables * i);
+	}
+}
+void exercerTables(int tables, int *score) {
+	printf("A vous de donner la table de %d\n", tables);
+	for (int i = 0; i <= 10; i++) {
+		int bonneReponse = tables * i;
+		printf("%d * %d = ", tables, i);
+		*score += poserQuestion(bonneReponse);
+	}
+}
+void jouerDivisions(int *score) {
+	int b = rand() % 10 + 1;
+	int resultat = rand() % 11;
+	int a = b * resultat;
+	printf("Division\n");
+	printf("%d / %d = ?\n", a, b);
+	*score += poserQuestion(resultat);
+}
+void chargerScore(char *nom, int *score) {
+	FILE *fichier = fopen("scores.txt", "r");
+	char nomFichier[TAILLE_NOM];
+	int scoreLu;
+	if (fichier == NULL) {
+		printf("Pas de fichier de scores existant.\n");
+		return;
+	}
+	while (fscanf(fichier, "%s %d", nomFichier, &scoreLu) != EOF) {
+		if (strcmp(nomFichier, nom) == 0) {
+			*score = scoreLu;
+			break;
+		}
+	}
+	fclose(fichier);
+}
+void sauvegarderScore(char *nom, int score) {
+	FILE *fichier = fopen("scores.txt", "r");
+	FILE *temp = fopen("temp.txt", "w");
+	char nomFichier[TAILLE_NOM];
+	int scoreLu;
+	int trouve = 0;
+	if (fichier == NULL || temp == NULL) {
+		printf("Erreur d'accC(s aux fichiers.\n");
+		return;
+	}
+	while (fscanf(fichier, "%s %d", nomFichier, &scoreLu) != EOF) {
+		if (strcmp(nomFichier, nom) == 0) {
+			fprintf(temp, "%s %d\n", nom, score);
+			trouve = 1;
+		} else {
+			fprintf(temp, "%s %d\n", nomFichier, scoreLu);
+		}
+	}
+	if (!trouve) {
+		fprintf(temp, "%s %d\n", nom, score);
+	}
+	fclose(fichier);
+	fclose(temp);
+	remove("scores.txt");
+	rename("temp.txt", "scores.txt");
+}
